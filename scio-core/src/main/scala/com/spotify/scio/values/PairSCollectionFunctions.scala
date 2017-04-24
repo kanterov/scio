@@ -29,6 +29,20 @@ import org.apache.beam.sdk.values.{KV, PCollection, PCollectionView}
 
 import scala.reflect.ClassTag
 
+object PairSCollectionFunctions {
+
+  def optimalBloomFilterWidth(numEntries: Long, fpProb: Double): (Int, Int) = {
+    def estimate(numEntries: Int, fpProb: Double): Int =
+      math.ceil(-1 * numEntries * math.log(fpProb) / math.log(2) / math.log(2)).toInt
+
+    val (minSize, maxSize) = (2048, 1 << 30)
+    val startSize = math.min(numEntries, maxSize).toInt
+    var width = estimate(startSize, fpProb)
+
+  }
+
+}
+
 // scalastyle:off number.of.methods
 /**
  * Extra functions available on SCollections of (key, value) pairs through an implicit conversion.
